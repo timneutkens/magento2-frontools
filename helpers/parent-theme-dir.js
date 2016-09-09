@@ -1,13 +1,18 @@
-module.exports = function(themeName, config) {
-  function getParentThemeDir(themeName) {
-    var theme = config.themes[themeName];
-    if (theme.parent) {
-      var path = [config.projectPath + config.themes[theme.parent].src + '/web/css/'];
-      return path.concat(getParentThemeDir(theme.parent));
-    }
-    else {
-      return [];
+'use strict';
+module.exports = function (themeName, config) { // eslint-disable-line func-names
+  const paths = [];
+
+  function getThemePath(themeName) {
+    const theme = config.themes[themeName];
+
+    paths.push(config.projectPath + theme.src);
+
+    if(theme.parent) {
+      getThemePath(theme.parent);
     }
   }
-  return getParentThemeDir(themeName);
+
+  getThemePath(themeName);
+
+  return paths;
 };
